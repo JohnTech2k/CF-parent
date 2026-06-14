@@ -334,6 +334,14 @@
       background: #27ae60;
     }
 
+    .loc-btn.yellow {
+      background: #f39c12;
+    }
+
+    .loc-btn.red {
+      background: #e74c3c;
+    }
+
     .loc-msg {
       margin-top: 10px;
       padding: 9px 14px;
@@ -825,6 +833,7 @@
       <div class="avatar" id="avatarLetter">?</div>
       <div class="profile-info">
         <div class="name" id="studentName">Loading...</div>
+        <div id="presenceStatus" style="font-size: 14px; margin-top: 4px; opacity: 0.95; font-weight: 600;">Status: —</div>
         <div class="meta">
           <span>🎓 Batch: <b id="batchId">—</b></span>
           <span>🆔 ID: <b id="studentIdDisplay">—</b></span>
@@ -862,6 +871,18 @@
         <div class="lbl">Journey Ended</div>
         <div class="val" id="journeyEnd">—</div>
       </div>
+    </div>
+
+    <!-- Student: Journey Controls -->
+    <div class="section" id="journeyControlsSection" style="display:none;">
+      <div class="section-title">🚶 Journey Controls</div>
+      <div class="loc-btn-row">
+        <button class="loc-btn yellow" id="startBtn" onclick="startJourney()">🚶 Start Journey</button>
+        <button class="loc-btn blue" id="atHomeBtn" onclick="markReached()" style="display:none;">🏡 I am at Home Now</button>
+        <button class="loc-btn green" id="stopBtn" onclick="markReached()" style="display:none;">✅ I've Reached Destination</button>
+        <button class="loc-btn red" id="resetBtn" onclick="resetJourney()" style="display:none;">🔄 Reset to Hostel</button>
+      </div>
+      <div class="loc-msg" id="journeyLocMsg"></div>
     </div>
 
     <!-- Student: Set Home Location (hidden for admin) -->
@@ -1015,6 +1036,16 @@
       });
 
       function initApp(isAdmin, userId) {
+        let hostelLocation = null;
+        db.ref("hostel").on("value", (snap) => {
+          hostelLocation = snap.val();
+          if (isAdmin && hostelLocation) {
+            const txt = hostelLocation.address || `${hostelLocation.lat?.toFixed(4)}, ${hostelLocation.lng?.toFixed(4)}`;
+            if (document.getElementById("hostelAddress")) document.getElementById("hostelAddress").value = hostelLocation.address || "";
+            if (document.getElementById("hostelLocationText")) document.getElementById("hostelLocationText").textContent = txt;
+            if (document.getElementById("hostelLocationSet")) document.getElementById("hostelLocationSet").style.display = "block";
+          }
+        });
 
         // Show admin sections if admin
         if (isAdmin) {
@@ -1024,9 +1055,15 @@
           document.getElementById("batchSection").style.display = "block";
           document.getElementById("studentsSection").style.display = "block";
           document.getElementById("homeLocationSection").style.display = "none"; // admin has no home location
+          if (document.getElementById("journeyControlsSection")) {
+            document.getElementById("journeyControlsSection").style.display = "none";
+          }
         } else {
           document.getElementById("adminDivider").style.display = "none";
           document.getElementById("homeLocationSection").style.display = "block";
+          if (document.getElementById("journeyControlsSection")) {
+            document.getElementById("journeyControlsSection").style.display = "block";
+          }
         }
 
         // ─── Shared helpers ─────────────────────────────────────────
@@ -1040,8 +1077,20 @@
           return d.innerHTML;
         }
 
+        function getDistance(lat1, lon1, lat2, lon2) {
+          const R = 6371; // Radius of the earth in km
+          const dLat = (lat2 - lat1) * Math.PI / 180;
+          const dLon = (lon2 - lon1) * Math.PI / 180;
+          const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+          const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+          return R * c;
+        }
+
         // ─── STUDENT dashboard ──────────────────────────────────────
         let currentStudentData = {};
+        let watchId = null;
 
         const statusConfig = {
           in_hostel: { icon: "🏠", title: "In Hostel", sub: "You are currently at the hostel", badge: "In Hostel" },
@@ -1063,12 +1112,57 @@
           }
           currentStudentData = data;
           renderStudentDashboard(data);
+
+          // Auto-resume location sharing if status is on_way
+          if (!isAdmin && data.status === "on_way") {
+            startLocationSharing();
+          }
         });
 
         function renderStudentDashboard(data) {
           document.getElementById("studentName").textContent = data.name;
           document.getElementById("avatarLetter").textContent = data.name.charAt(0).toUpperCase();
           document.getElementById("batchId").textContent = data.batchId;
+
+          let presenceText = "Unknown";
+          if (data.currentLocation && data.currentLocation.lat) {
+            const lat = data.currentLocation.lat;
+            const lng = data.currentLocation.lng;
+            let found = false;
+
+            if (data.destination && data.destination.lat) {
+              const distHome = getDistance(lat, lng, data.destination.lat, data.destination.lng);
+              if (distHome < 0.3) {
+                presenceText = "🏡 At Home";
+                found = true;
+              }
+            }
+
+            if (!found && hostelLocation && hostelLocation.lat) {
+              const distHostel = getDistance(lat, lng, hostelLocation.lat, hostelLocation.lng);
+              if (distHostel < 0.3) {
+                presenceText = "🏫 In Hostel";
+                found = true;
+              }
+            }
+
+            if (!found) {
+              presenceText = "🚶 On the Way";
+            }
+          } else {
+            // Fallback to data.status
+            if (data.status === "reached") {
+              presenceText = "🏡 At Home";
+            } else if (data.status === "on_way") {
+              presenceText = "🚶 On the Way";
+            } else {
+              presenceText = "🏫 In Hostel";
+            }
+          }
+
+          if (document.getElementById("presenceStatus")) {
+            document.getElementById("presenceStatus").innerHTML = `Status: <span style="background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 4px; font-weight: 700;">${presenceText}</span>`;
+          }
 
           const cfg = statusConfig[data.status] || statusConfig.in_hostel;
           const card = document.getElementById("statusCard");
@@ -1092,6 +1186,34 @@
             if (document.getElementById("homeAddress")) document.getElementById("homeAddress").value = data.destination.address || "";
             if (document.getElementById("homeLocationText")) document.getElementById("homeLocationText").textContent = data.destination.address || `${data.destination.lat?.toFixed(4)}, ${data.destination.lng?.toFixed(4)}`;
             if (document.getElementById("homeLocationSet")) document.getElementById("homeLocationSet").style.display = "block";
+          }
+
+          if (!isAdmin) {
+            // Update Journey Control buttons based on student status
+            const startBtn = document.getElementById("startBtn");
+            const atHomeBtn = document.getElementById("atHomeBtn");
+            const stopBtn = document.getElementById("stopBtn");
+            const resetBtn = document.getElementById("resetBtn");
+            
+            if (startBtn && atHomeBtn && stopBtn && resetBtn) {
+              const status = data.status || "in_hostel";
+              if (status === "on_way") {
+                startBtn.style.display = "none";
+                atHomeBtn.style.display = "inline-block";
+                stopBtn.style.display = "inline-block";
+                resetBtn.style.display = "none";
+              } else if (status === "reached") {
+                startBtn.style.display = "none";
+                atHomeBtn.style.display = "none";
+                stopBtn.style.display = "none";
+                resetBtn.style.display = "inline-block";
+              } else { // in_hostel
+                startBtn.style.display = "inline-block";
+                atHomeBtn.style.display = "none";
+                stopBtn.style.display = "none";
+                resetBtn.style.display = "none";
+              }
+            }
           }
         }
 
@@ -1242,6 +1364,164 @@
           showLocMsg("homeLocMsg", "Home address saved!", "success");
         }
 
+        // ─── Student: Journey Controls ─────────────────────────────────
+        window.startJourney = async function () {
+          if (!currentStudentData.destination) {
+            showLocMsg("journeyLocMsg", "Please set your home location first.", "error");
+            return;
+          }
+          showLocMsg("journeyLocMsg", "Starting journey...", "info");
+          try {
+            await db.ref("students/" + userId).update({
+              status: "on_way",
+              journeyStartTime: Date.now(),
+              journeyEndTime: null,
+              lastUpdated: Date.now()
+            });
+            startLocationSharing();
+            showLocMsg("journeyLocMsg", "Journey started! Live location sharing active.", "success");
+          } catch (err) {
+            showLocMsg("journeyLocMsg", "Error: " + err.message, "error");
+          }
+        };
+
+        window.markReached = async function () {
+          showLocMsg("journeyLocMsg", "Updating status...", "info");
+          try {
+            await db.ref("students/" + userId).update({
+              status: "reached",
+              journeyEndTime: Date.now(),
+              lastUpdated: Date.now()
+            });
+            stopLocationSharing();
+            showLocMsg("journeyLocMsg", "You've been marked as reached home safely! 🎉", "success");
+          } catch (err) {
+            showLocMsg("journeyLocMsg", "Error: " + err.message, "error");
+          }
+        };
+
+        window.resetJourney = async function () {
+          if (!confirm("Reset your status to 'In Hostel' and clear location/journey data?")) return;
+          showLocMsg("journeyLocMsg", "Resetting...", "info");
+          try {
+            await db.ref("students/" + userId).update({
+              status: "in_hostel",
+              destination: null,
+              journeyStartTime: null,
+              journeyEndTime: null,
+              currentLocation: null,
+              lastUpdated: Date.now()
+            });
+            stopLocationSharing();
+            showLocMsg("journeyLocMsg", "Status reset to In Hostel.", "success");
+            // Clear input fields and home location display in UI
+            if (document.getElementById("homeAddress")) document.getElementById("homeAddress").value = "";
+            if (document.getElementById("homeLocationText")) document.getElementById("homeLocationText").textContent = "";
+            if (document.getElementById("homeLocationSet")) document.getElementById("homeLocationSet").style.display = "none";
+          } catch (err) {
+            showLocMsg("journeyLocMsg", "Error: " + err.message, "error");
+          }
+        };
+
+        async function runGeofenceCheck(lat, lng) {
+          if (!currentStudentData) return;
+          
+          // Check distance to home (destination)
+          if (currentStudentData.destination && currentStudentData.destination.lat) {
+            const distHome = getDistance(lat, lng, currentStudentData.destination.lat, currentStudentData.destination.lng);
+            if (distHome < 0.3) { // within 300 meters of home
+              if (currentStudentData.status !== "reached") {
+                console.log("Geofence: close to home, updating status to reached");
+                await db.ref("students/" + userId).update({
+                  status: "reached",
+                  journeyEndTime: Date.now(),
+                  lastUpdated: Date.now()
+                });
+                stopLocationSharing();
+              }
+              return;
+            }
+          }
+          
+          // Check distance to hostel
+          if (hostelLocation && hostelLocation.lat) {
+            const distHostel = getDistance(lat, lng, hostelLocation.lat, hostelLocation.lng);
+            if (distHostel < 0.3) { // within 300 meters of hostel
+              if (currentStudentData.status !== "in_hostel") {
+                console.log("Geofence: close to hostel, updating status to in_hostel");
+                await db.ref("students/" + userId).update({
+                  status: "in_hostel",
+                  journeyStartTime: null,
+                  journeyEndTime: null,
+                  currentLocation: null,
+                  lastUpdated: Date.now()
+                });
+                stopLocationSharing();
+              }
+              return;
+            }
+          }
+        }
+
+        function startLocationSharing() {
+          if (watchId !== null) return;
+          if (!navigator.geolocation) {
+            showLocMsg("journeyLocMsg", "Geolocation not supported by this browser.", "error");
+            return;
+          }
+          watchId = navigator.geolocation.watchPosition(
+            (pos) => {
+              const lat = pos.coords.latitude;
+              const lng = pos.coords.longitude;
+              db.ref("students/" + userId).update({
+                currentLocation: {
+                  lat: lat,
+                  lng: lng,
+                  timestamp: Date.now()
+                },
+                lastUpdated: Date.now()
+              });
+              runGeofenceCheck(lat, lng);
+            },
+            (err) => {
+              showLocMsg("journeyLocMsg", "Location sharing error: " + err.message, "error");
+            },
+            { enableHighAccuracy: true, maximumAge: 5000, timeout: 15000 }
+          );
+        }
+
+        function stopLocationSharing() {
+          if (watchId !== null) {
+            navigator.geolocation.clearWatch(watchId);
+            watchId = null;
+          }
+        }
+
+        window.addEventListener("beforeunload", stopLocationSharing);
+
+        if (!isAdmin) {
+          // Onload geofence check to auto-set status on load based on physical presence
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+              async (pos) => {
+                const lat = pos.coords.latitude;
+                const lng = pos.coords.longitude;
+                // Wait briefly for Firebase listeners to populate currentStudentData / hostelLocation
+                let checkCount = 0;
+                const interval = setInterval(async () => {
+                  checkCount++;
+                  if ((currentStudentData && currentStudentData.destination) || hostelLocation || checkCount > 20) {
+                    clearInterval(interval);
+                    await runGeofenceCheck(lat, lng);
+                  }
+                }, 200);
+              },
+              (err) => console.log("Onload geofence location check skipped:", err.message),
+              { enableHighAccuracy: true, timeout: 8000 }
+            );
+          }
+        }
+
         // ─── ADMIN functions ─────────────────────────────────────────
         if (isAdmin) {
           let allStudents = {};
@@ -1253,16 +1533,7 @@
           window.adminResetStatus = adminResetStatus;
           window.deleteStudent = deleteStudent;
 
-          // Load existing hostel location
-          db.ref("hostel").once("value").then(snap => {
-            const h = snap.val();
-            if (h) {
-              const txt = h.address || `${h.lat?.toFixed(4)}, ${h.lng?.toFixed(4)}`;
-              document.getElementById("hostelAddress").value = h.address || "";
-              document.getElementById("hostelLocationText").textContent = txt;
-              document.getElementById("hostelLocationSet").style.display = "block";
-            }
-          });
+
 
           window.pinHostelLocation = function () {
             showLocMsg("hostelLocMsg", "Getting location...", "info");
@@ -1606,17 +1877,6 @@
           function speak(text) {
             const utterance = new SpeechSynthesisUtterance(text);
             window.speechSynthesis.speak(utterance);
-          }
-
-          function getDistance(lat1, lon1, lat2, lon2) {
-            const R = 6371; // Radius of the earth in km
-            const dLat = (lat2 - lat1) * Math.PI / 180;
-            const dLon = (lon2 - lon1) * Math.PI / 180;
-            const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-              Math.sin(dLon / 2) * Math.sin(dLon / 2);
-            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-            return R * c;
           }
 
           window.renderStudents = renderStudents;
