@@ -1,4 +1,4 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+console.log("JS Loaded");
 
 const firebaseConfig = {
     apiKey: "AIzaSyAEYLb-12Sy1IJt-Sw-1IG3tnmiNsKyFAg",
@@ -12,5 +12,40 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-export { app, firebaseConfig };
+firebase.initializeApp(firebaseConfig);
+
+function registerUser() {
+    console.log("registerUser called");
+
+    const adminId = document.getElementById("adminId").value;
+    const password = document.getElementById("password").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
+
+    if (!adminId || !password || !confirmPassword) {
+        alert("All fields required");
+        return;
+    }
+
+    if (password !== confirmPassword) {
+        alert("Passwords do not match");
+        return;
+    }
+
+    firebase.database().ref("admins/" + adminId).set({
+        password: password
+    })
+        .then(() => {
+            alert("Registered successfully");
+        })
+        .catch(err => alert(err.message));
+}
+
+// Ensure function is globally accessible
+window.registerUser = registerUser;
+
+document.addEventListener("DOMContentLoaded", () => {
+    const registerBtn = document.getElementById("registerBtn");
+    if (registerBtn) {
+        registerBtn.addEventListener("click", registerUser);
+    }
+});
