@@ -2,3 +2,5 @@ import { getDatabase, ref, set, get, child, onValue, update, remove } from "http
 import { app } from "./firebase.js";
 
 const db = getDatabase(app);
+
+export { db, ref, set, get, child, onValue, update, remove };

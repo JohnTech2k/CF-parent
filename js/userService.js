@@ -3,25 +3,24 @@ import { db, ref, set, get, child } from "./db.js";
 /**
  * Create a user with a unique ID
  */
-export const createUser = async (userId, name = "") => {
-    if (!userId) throw new Error("User ID is required.");
+export const createUser = async (userId, name) => {
+    if (!userId || !userId.trim()) throw new Error("User ID is required.");
+    if (!name || !name.trim()) throw new Error("Name is required.");
 
     const cleanId = userId.trim().toLowerCase();
-    const dbRef = ref(db);
 
     // Check if user already exists
-    const snapshot = await get(child(dbRef, `users/${cleanId}`));
-    if (snapshot.exists()) {
-        throw new Error("User ID already exists.");
+    const existingUser = await getUserData(cleanId);
+    if (existingUser) {
+        throw new Error("User ID already taken.");
     }
 
     const userData = {
-        name: name,
+        name: name.trim(),
         createdAt: Date.now()
     };
 
     await set(ref(db, `users/${cleanId}`), userData);
-    console.log("User created successfully:", cleanId);
     return { id: cleanId, ...userData };
 };
 
@@ -29,7 +28,7 @@ export const createUser = async (userId, name = "") => {
  * Custom ID Login System
  */
 export const loginUser = async (userId) => {
-    if (!userId) throw new Error("Please enter an ID.");
+    if (!userId || !userId.trim()) throw new Error("Please enter a User ID.");
 
     const cleanId = userId.trim().toLowerCase();
     const userData = await getUserData(cleanId);
@@ -38,13 +37,12 @@ export const loginUser = async (userId) => {
         throw new Error("User not found.");
     }
 
-    // Store session locally
+    // Store session locally for dashboard use
     localStorage.setItem("cfp_session", JSON.stringify({
         id: cleanId,
-        ...userData
+        name: userData.name
     }));
 
-    console.log("Login success:", cleanId);
     return { id: cleanId, ...userData };
 };
 
