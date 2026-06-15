@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -7,6 +7,40 @@
   <title>CF Parents - Dashboard</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <style>
+    :root {
+      --bg: #f0f3f8;
+      --surface: #fff;
+      --border: #eee;
+      --text: #333;
+      --text-muted: #888;
+      --text-label: #555;
+      --input-border: #ddd;
+      --th-bg: #f8f9fb;
+      --info-box-bg: #fff;
+      --location-set-bg: #f0f8ff;
+      --location-set-border: #b3d4f5;
+      --location-set-color: #1e3c72;
+      --divider-bg: #f0f3f8;
+      --stat-num: #1e3c72;
+    }
+
+    body.dark {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --border: #2a2d3a;
+      --text: #e0e0e0;
+      --text-muted: #888;
+      --text-label: #aaa;
+      --input-border: #3a3d4a;
+      --th-bg: #22263a;
+      --info-box-bg: #1a1d27;
+      --location-set-bg: #1a2540;
+      --location-set-border: #2a4a80;
+      --location-set-color: #7aadff;
+      --divider-bg: #0f1117;
+      --stat-num: #7aadff;
+    }
+
     * {
       margin: 0;
       padding: 0;
@@ -15,7 +49,8 @@
     }
 
     body {
-      background: #f0f3f8;
+      background: var(--bg);
+      color: var(--text);
     }
 
     header {
@@ -71,6 +106,25 @@
       margin: 0 auto;
     }
 
+    /* Offline Banner */
+    #offlineBanner {
+      display: none;
+      position: sticky;
+      top: 0;
+      z-index: 997;
+      background: #2c3e50;
+      color: #fff;
+      text-align: center;
+      padding: 10px 20px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+
+    #offlineBanner.online {
+      background: #27ae60;
+    }
+
     /* Admin-only sections hidden by default */
     .admin-only {
       display: none;
@@ -97,7 +151,7 @@
     }
 
     .stat-card {
-      background: #fff;
+      background: var(--surface);
       border-radius: 10px;
       padding: 16px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
@@ -107,12 +161,12 @@
     .stat-card .num {
       font-size: 28px;
       font-weight: 800;
-      color: #1e3c72;
+      color: var(--stat-num);
     }
 
     .stat-card .label {
       font-size: 13px;
-      color: #888;
+      color: var(--text-muted);
       margin-top: 4px;
     }
 
@@ -243,7 +297,7 @@
     }
 
     .info-box {
-      background: #fff;
+      background: var(--info-box-bg);
       border-radius: 12px;
       padding: 16px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
@@ -251,7 +305,7 @@
 
     .info-box .lbl {
       font-size: 12px;
-      color: #999;
+      color: var(--text-muted);
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.5px;
@@ -260,13 +314,13 @@
     .info-box .val {
       font-size: 13px;
       font-weight: 700;
-      color: #222;
+      color: var(--text);
       margin-top: 6px;
     }
 
     /* Section */
     .section {
-      background: #fff;
+      background: var(--surface);
       border-radius: 14px;
       padding: 20px;
       margin-bottom: 20px;
@@ -276,7 +330,7 @@
     .section-title {
       font-size: 15px;
       font-weight: 800;
-      color: #1e3c72;
+      color: var(--stat-num);
       margin-bottom: 16px;
       display: flex;
       align-items: center;
@@ -288,7 +342,7 @@
       display: block;
       font-size: 13px;
       font-weight: 600;
-      color: #555;
+      color: var(--text-label);
       margin-bottom: 6px;
       margin-top: 14px;
     }
@@ -296,11 +350,13 @@
     input {
       width: 100%;
       padding: 12px;
-      border: 1px solid #ddd;
+      border: 1px solid var(--input-border);
       border-radius: 8px;
       font-size: 14px;
       outline: none;
       transition: 0.2s;
+      background: var(--surface);
+      color: var(--text);
     }
 
     input:focus {
@@ -311,7 +367,7 @@
 
     /* Location section */
     .location-section {
-      background: #fff;
+      background: var(--surface);
       border-radius: 14px;
       padding: 20px;
       margin-bottom: 20px;
@@ -319,12 +375,12 @@
     }
 
     .location-set {
-      background: #f0f8ff;
-      border: 1px solid #b3d4f5;
+      background: var(--location-set-bg);
+      border: 1px solid var(--location-set-border);
       border-radius: 8px;
       padding: 10px 14px;
       font-size: 13px;
-      color: #1e3c72;
+      color: var(--location-set-color);
       margin-top: 10px;
       display: none;
     }
@@ -378,6 +434,12 @@
       display: block;
     }
 
+    .loc-msg.info {
+      background: #e8f0fe;
+      color: #1e3c72;
+      display: block;
+    }
+
     .loc-msg.success {
       background: #eafaf1;
       color: #27ae60;
@@ -422,10 +484,12 @@
     .map-search-input {
       flex: 1;
       padding: 9px 12px;
-      border: 1px solid #ddd;
+      border: 1px solid var(--input-border);
       border-radius: 8px;
       font-size: 13px;
       outline: none;
+      background: var(--surface);
+      color: var(--text);
     }
 
     .map-search-input:focus {
@@ -450,8 +514,8 @@
 
     .map-search-results {
       display: none;
-      background: #fff;
-      border: 1px solid #ddd;
+      background: var(--surface);
+      border: 1px solid var(--input-border);
       border-radius: 8px;
       margin-top: 4px;
       max-height: 180px;
@@ -467,8 +531,8 @@
       padding: 10px 14px;
       font-size: 13px;
       cursor: pointer;
-      border-bottom: 1px solid #f0f0f0;
-      color: #333;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
     }
 
     .map-search-item:last-child {
@@ -476,8 +540,8 @@
     }
 
     .map-search-item:hover {
-      background: #f0f4ff;
-      color: #1e3c72;
+      background: var(--th-bg);
+      color: var(--stat-num);
     }
 
     .loc-btn.orange {
@@ -495,9 +559,10 @@
     .filter-row select {
       padding: 9px 14px;
       border-radius: 8px;
-      border: 1px solid #ddd;
+      border: 1px solid var(--input-border);
       font-size: 13px;
-      background: #fff;
+      background: var(--surface);
+      color: var(--text);
       outline: none;
       cursor: pointer;
     }
@@ -517,13 +582,89 @@
     td {
       padding: 10px;
       text-align: left;
-      border-bottom: 1px solid #eee;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
     }
 
     th {
-      background: #f8f9fb;
-      color: #555;
+      background: var(--th-bg);
+      color: var(--text-label);
       font-weight: 700;
+    }
+
+    /* Student list view */
+    .students-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .stu-list-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: 10px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid #ddd;
+      transition: box-shadow 0.15s;
+    }
+
+    .stu-list-row:hover {
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
+    }
+
+    .stu-list-row.in_hostel {
+      border-left-color: #27ae60;
+    }
+
+    .stu-list-row.on_way {
+      border-left-color: #e6a800;
+    }
+
+    .stu-list-row.reached {
+      border-left-color: #1967d2;
+    }
+
+    .stu-list-row.at_home {
+      border-left-color: #6f42c1;
+    }
+
+    .stu-list-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: 800;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .stu-list-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .stu-list-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--stat-num);
+    }
+
+    .stu-list-meta {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .stu-list-actions {
+      display: flex;
+      gap: 6px;
+      flex-shrink: 0;
     }
 
     /* Student Cards Grid */
@@ -538,7 +679,7 @@
       padding: 18px;
       box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
       border-top: 4px solid #ddd;
-      background: #fff;
+      background: var(--surface);
       display: flex;
       flex-direction: column;
       gap: 10px;
@@ -604,12 +745,12 @@
     .stu-card-name {
       font-size: 15px;
       font-weight: 800;
-      color: #1e3c72;
+      color: var(--stat-num);
     }
 
     .stu-card-id {
       font-size: 12px;
-      color: #999;
+      color: var(--text-muted);
       margin-top: 2px;
     }
 
@@ -624,7 +765,7 @@
       align-items: center;
       gap: 7px;
       font-size: 12px;
-      color: #555;
+      color: var(--text-label);
     }
 
     .stu-meta-row span {
@@ -714,13 +855,13 @@
       font-size: 12px;
       font-weight: 700;
       cursor: pointer;
-      background: #f0f0f0;
-      color: #555;
+      background: var(--th-bg);
+      color: var(--text-label);
       transition: background 0.15s;
     }
 
     .stu-settings-btn:hover {
-      background: #e0e0e0;
+      background: var(--border);
     }
 
     .stu-dropdown {
@@ -728,9 +869,9 @@
       position: absolute;
       right: 0;
       bottom: calc(100% + 6px);
-      background: #fff;
+      background: var(--surface);
       border-radius: 10px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
       min-width: 170px;
       z-index: 100;
       overflow: hidden;
@@ -748,7 +889,7 @@
       font-size: 13px;
       font-weight: 600;
       cursor: pointer;
-      color: #333;
+      color: var(--text);
       transition: background 0.1s;
       border: none;
       background: none;
@@ -757,7 +898,7 @@
     }
 
     .stu-dropdown-item:hover {
-      background: #f5f5f5;
+      background: var(--th-bg);
     }
 
     .stu-dropdown-item.danger {
@@ -805,6 +946,33 @@
       display: block;
     }
 
+    /* SOS Button */
+    .sos-btn {
+      width: 100%;
+      padding: 16px;
+      background: #c0392b;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: 900;
+      cursor: pointer;
+      letter-spacing: 1px;
+      margin-top: 14px;
+      box-shadow: 0 4px 14px rgba(192, 57, 43, 0.4);
+      transition: transform 0.1s;
+    }
+
+    .sos-btn:active {
+      transform: scale(0.97);
+    }
+
+    .sos-btn:disabled {
+      background: #888;
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+
     /* Admin divider */
     .admin-divider {
       display: none;
@@ -814,7 +982,7 @@
     }
 
     .admin-divider span {
-      background: #f0f3f8;
+      background: var(--divider-bg);
       padding: 0 14px;
       font-size: 12px;
       font-weight: 700;
@@ -832,8 +1000,9 @@
       left: 0;
       right: 0;
       height: 1px;
-      background: #ddd;
+      background: var(--border);
     }
+
 
     @media (max-width: 500px) {
       .info-grid {
@@ -850,11 +1019,14 @@
 
 <body>
 
+  <div id="offlineBanner">📵 You are offline — location sharing and status updates are paused</div>
+
   <header>
     <div class="brand">CF Parents</div>
     <div class="right">
       <span class="role-badge" id="roleBadge">Student</span>
       <span class="user" id="headerUser"></span>
+      <button id="darkToggle" onclick="toggleDark()">🌙 Dark</button>
       <button onclick="logoutUser()">Logout</button>
     </div>
   </header>
@@ -923,6 +1095,8 @@
           Hostel</button>
       </div>
       <div class="loc-msg" id="journeyLocMsg"></div>
+      <button class="sos-btn" id="sosBtn" onclick="sendSOS()">🆘 SEND SOS — I Need Help</button>
+      <div class="loc-msg" id="sosMsg"></div>
     </div>
 
     <!-- Student: Set Home Location (hidden for admin) -->
@@ -959,7 +1133,8 @@
     <!-- Stats -->
     <div class="admin-only" id="statsSection">
       <div style="margin-bottom: 10px; display: flex; justify-content: flex-end;">
-        <button id="voiceBtn" class="small-btn purple" onclick="toggleVoiceGuide()">🔊 Enable Voice Guide (Off)</button>
+        <button id="voiceBtn" class="small-btn purple" onclick="toggleVoiceGuide()">🔊 Enable Voice Guide
+          (Off)</button>
       </div>
       <div class="stats">
         <div class="stat-card">
@@ -984,7 +1159,7 @@
         </div>
       </div>
 
-      <!-- Track Map removed — now renders inside each student card -->
+      <!-- Track Map removed â€” now renders inside each student card -->
 
       <!-- Admin: Set Hostel Location -->
       <div class="section admin-only" id="hostelLocationSection">
@@ -1036,7 +1211,8 @@
       <!-- All Students -->
       <div class="section admin-only" id="studentsSection">
         <div class="section-title">👥 All Students
-          <div style="display:flex;gap:8px;">
+          <div style="display:flex;gap:8px;align-items:center;">
+            <button id="viewToggleBtn" class="small-btn" onclick="toggleView()" title="Toggle View">☰ List View</button>
             <select id="batchFilter" onchange="renderStudents()">
               <option value="">All Batches</option>
             </select>
@@ -1064,6 +1240,35 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <script>
+      // Dark mode
+      function toggleDark() {
+        const isDark = document.body.classList.toggle('dark');
+        localStorage.setItem('cfDark', isDark ? '1' : '');
+        document.getElementById('darkToggle').textContent = isDark ? '☀️ Light' : '🌙 Dark';
+      }
+      if (localStorage.getItem('cfDark')) {
+        document.body.classList.add('dark');
+      }
+
+      // Offline banner
+      (function () {
+        const banner = document.getElementById('offlineBanner');
+        function update() {
+          if (!navigator.onLine) {
+            banner.style.display = 'block';
+            banner.classList.remove('online');
+            banner.textContent = '\ud83d\udcf5 You are offline \u2014 location sharing and status updates are paused';
+          } else if (banner.style.display === 'block') {
+            banner.classList.add('online');
+            banner.textContent = '\u2705 Back online!';
+            setTimeout(() => { banner.style.display = 'none'; banner.classList.remove('online'); }, 3000);
+          }
+        }
+        window.addEventListener('offline', update);
+        window.addEventListener('online', update);
+        update();
+      })();
+
       window.addEventListener("load", () => {
         const session = window.getSession();
         if (!session) { window.location.href = "index.html"; return; }
@@ -1073,6 +1278,7 @@
         const userId = session.id;
 
         document.getElementById("headerUser").textContent = "Logged in as: " + userId;
+        if (localStorage.getItem('cfDark')) document.getElementById('darkToggle').textContent = '☀️ Light';
         document.getElementById("roleBadge").textContent = isAdmin ? "🛡️ Admin" : "🎒 Student";
         if (document.getElementById("studentIdDisplay")) {
           document.getElementById("studentIdDisplay").textContent = userId;
@@ -1112,7 +1318,7 @@
           }
         }
 
-        // ─── Shared helpers ─────────────────────────────────────────
+        // â”€â”€â”€ Shared helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         function statusLabel(s) {
           return { in_hostel: "In Hostel", on_way: "On the Way", reached: "Reached", at_home: "At Home" }[s] || s;
         }
@@ -1134,7 +1340,7 @@
           return R * c;
         }
 
-        // ─── STUDENT dashboard ──────────────────────────────────────
+        // â”€â”€â”€ STUDENT dashboard â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         let currentStudentData = {};
         let watchId = null;
 
@@ -1151,10 +1357,10 @@
         db.ref("students/" + myStudentId).on("value", (snap) => {
           const data = snap.val();
           if (!data) {
-            // admin may not have a student record — show basic profile
+            // admin may not have a student record â€” show basic profile
             document.getElementById("studentName").textContent = userId;
             document.getElementById("avatarLetter").textContent = userId.charAt(0).toUpperCase();
-            document.getElementById("batchId").textContent = isAdmin ? "Admin" : "—";
+            document.getElementById("batchId").textContent = isAdmin ? "Admin" : "â€”";
             return;
           }
           currentStudentData = data;
@@ -1164,6 +1370,10 @@
           // so status auto-updates based on GPS (home / hostel / on_way)
           if (!isAdmin) {
             startLocationSharing();
+            // Sync once after data loads â€” but only if status is uncertain
+            if (data.status === "on_way") {
+              window.syncStatusWithLocation();
+            }
           }
         });
 
@@ -1181,7 +1391,7 @@
 
             if (data.destination && data.destination.lat) {
               const distHome = getDistance(lat, lng, data.destination.lat, data.destination.lng);
-              if (distHome < 0.3) {
+              if (distHome < 1.0) {
                 presenceText = "🏡 At Home";
                 found = true;
               }
@@ -1258,7 +1468,7 @@
                 atHomeBtn.style.display = "none";
                 stopBtn.style.display = "none";
                 resetBtn.style.display = "inline-block";
-                stopLocationSharing(); // Stop watching once reached
+                stopLocationSharing();
               } else { // in_hostel
                 startBtn.style.display = "inline-block";
                 atHomeBtn.style.display = "none";
@@ -1269,12 +1479,7 @@
           }
         }
 
-        // Automatically request location and sync status on app initialization for students
-        if (!isAdmin) {
-          setTimeout(() => {
-            if (typeof window.syncStatusWithLocation === 'function') window.syncStatusWithLocation();
-          }, 1000);
-        }
+        // syncStatusWithLocation is called only after student data loads (see db listener above)
 
         window.syncStatusWithLocation = function () {
           if (!navigator.geolocation) {
@@ -1288,26 +1493,45 @@
               const lng = pos.coords.longitude;
               showLocMsg("journeyLocMsg", "Location synced!", "success");
               await runGeofenceCheck(lat, lng);
-              // Save current location to DB so the dashboard UI reflects physical presence
               await db.ref("students/" + userId).update({
                 currentLocation: { lat, lng, timestamp: Date.now() },
                 lastUpdated: Date.now()
               });
             },
-            (err) => showLocMsg("journeyLocMsg", "Location access denied or failed: " + err.message, "error"),
-            { enableHighAccuracy: true }
+            (err) => {
+              if (err.code === err.TIMEOUT) {
+                // Retry with low accuracy on timeout
+                navigator.geolocation.getCurrentPosition(
+                  async (pos) => {
+                    const lat = pos.coords.latitude;
+                    const lng = pos.coords.longitude;
+                    showLocMsg("journeyLocMsg", "Location synced!", "success");
+                    await runGeofenceCheck(lat, lng);
+                    await db.ref("students/" + userId).update({
+                      currentLocation: { lat, lng, timestamp: Date.now() },
+                      lastUpdated: Date.now()
+                    });
+                  },
+                  () => showLocMsg("journeyLocMsg", "Could not get location. Please check GPS.", "error"),
+                  { enableHighAccuracy: false, timeout: 30000 }
+                );
+              } else {
+                showLocMsg("journeyLocMsg", "Location access denied or failed: " + err.message, "error");
+              }
+            },
+            { enableHighAccuracy: true, timeout: 20000 }
           );
         };
 
-        // ─── Pick on Map ─────────────────────────────────────────────
+        // â”€â”€â”€ Pick on Map â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         window.pickMaps = {};
         window.togglePickMap = togglePickMap;
         window.searchPlace = searchPlace;
         window.selectSearchResult = selectSearchResult;
         window.pinHomeLocation = pinHomeLocation;
         window.saveHomeAddress = saveHomeAddress;
-        window.pinHostelLocation = pinHostelLocation;
-        window.saveHostelAddress = saveHostelAddress;
+        window.pinHostelLocation = function () { };
+        window.saveHostelAddress = function () { };
 
         function togglePickMap(type) {
           const mapEl = document.getElementById(type + 'PickMap');
@@ -1417,7 +1641,7 @@
           document.getElementById(type + 'SearchResults').classList.remove('open');
         }
 
-        // ─── Student: Home Location ───────────────────────────────────
+        // â”€â”€â”€ Student: Home Location â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         function showLocMsg(id, text, type) {
           const el = document.getElementById(id);
           el.textContent = text;
@@ -1449,7 +1673,7 @@
           showLocMsg("homeLocMsg", "Home address saved!", "success");
         }
 
-        // ─── Student: Journey Controls ─────────────────────────────────
+        // â”€â”€â”€ Student: Journey Controls â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         window.startJourney = async function () {
           if (!currentStudentData.destination) {
             showLocMsg("journeyLocMsg", "Please set your home location first.", "error");
@@ -1457,11 +1681,18 @@
           }
           showLocMsg("journeyLocMsg", "Starting journey...", "info");
           try {
+            const journeyId = Date.now().toString();
             await db.ref("students/" + userId).update({
               status: "on_way",
               journeyStartTime: Date.now(),
               journeyEndTime: null,
+              currentJourneyId: journeyId,
               lastUpdated: Date.now()
+            });
+            await db.ref("journeyHistory/" + userId + "/" + journeyId).set({
+              startTime: Date.now(),
+              destination: currentStudentData.destination,
+              status: "on_way"
             });
             startLocationSharing();
             showLocMsg("journeyLocMsg", "Journey started! Live location sharing active.", "success");
@@ -1471,18 +1702,23 @@
         };
 
         window.markReached = async function () {
-          if (!currentStudentData || !currentStudentData.destination) {
-            showLocMsg("journeyLocMsg", "Please set your home location first.", "error");
-            return;
-          }
           if (!userId) return;
           showLocMsg("journeyLocMsg", "Updating status...", "info");
           try {
+            const endTime = Date.now();
             await db.ref("students/" + userId).update({
               status: "at_home",
-              journeyEndTime: Date.now(),
-              lastUpdated: Date.now()
+              journeyEndTime: endTime,
+              lastUpdated: endTime
             });
+            // Update history entry
+            const journeyId = currentStudentData.currentJourneyId;
+            if (journeyId) {
+              await db.ref("journeyHistory/" + userId + "/" + journeyId).update({
+                endTime,
+                status: "completed"
+              });
+            }
             showLocMsg("journeyLocMsg", "You've been marked as reached home safely! 🎉", "success");
           } catch (err) {
             showLocMsg("journeyLocMsg", "Error: " + err.message, "error");
@@ -1520,53 +1756,38 @@
           let nearHome = false;
           let nearHostel = false;
 
-          // Check distance to home (destination)
           if (currentStudentData.destination && currentStudentData.destination.lat) {
-            const distHome = getDistance(lat, lng, currentStudentData.destination.lat, currentStudentData.destination.lng);
-            if (distHome < 0.3) nearHome = true; // within 300 meters
+            const distHome = getDistance(lat, lng,
+              parseFloat(currentStudentData.destination.lat),
+              parseFloat(currentStudentData.destination.lng));
+            if (distHome < 1.0) nearHome = true;
           }
 
-          // Check distance to hostel
           if (hostelLocation && hostelLocation.lat) {
-            const distHostel = getDistance(lat, lng, hostelLocation.lat, hostelLocation.lng);
-            if (distHostel < 0.3) nearHostel = true; // within 300 meters
+            const distHostel = getDistance(lat, lng,
+              parseFloat(hostelLocation.lat),
+              parseFloat(hostelLocation.lng));
+            if (distHostel < 0.3) nearHostel = true;
           }
 
-          if (nearHome) {
-            // Student is at home
-            if (currentStudentData.status !== "at_home") {
-              console.log("Geofence: close to home, auto-updating status to at_home");
-              await db.ref("students/" + userId).update({
-                status: "at_home",
-                journeyEndTime: Date.now(),
-                lastUpdated: Date.now()
-              });
-            }
-          } else if (nearHostel) {
-            // Student is at hostel
-            if (currentStudentData.status !== "in_hostel") {
-              console.log("Geofence: close to hostel, auto-updating status to in_hostel");
-              await db.ref("students/" + userId).update({
-                status: "in_hostel",
-                journeyStartTime: null,
-                journeyEndTime: null,
-                lastUpdated: Date.now()
-              });
-            }
-          } else {
-            // Student is neither at home nor hostel — they are on the way
-            if (currentStudentData.status !== "on_way") {
-              console.log("Geofence: not near home or hostel, auto-updating status to on_way");
-              await db.ref("students/" + userId).update({
-                status: "on_way",
-                journeyStartTime: currentStudentData.journeyStartTime || Date.now(),
-                journeyEndTime: null,
-                lastUpdated: Date.now()
-              });
-            }
+          if (nearHome && currentStudentData.status !== "at_home") {
+            await db.ref("students/" + userId).update({
+              status: "at_home", journeyEndTime: Date.now(), lastUpdated: Date.now()
+            });
+          } else if (!nearHome && nearHostel && currentStudentData.status !== "in_hostel") {
+            await db.ref("students/" + userId).update({
+              status: "in_hostel", journeyStartTime: null, journeyEndTime: null, lastUpdated: Date.now()
+            });
+          } else if (!nearHome && !nearHostel && currentStudentData.status === "in_hostel" && currentStudentData.destination) {
+            await db.ref("students/" + userId).update({
+              status: "on_way", journeyStartTime: Date.now(), journeyEndTime: null, lastUpdated: Date.now()
+            });
+          } else if (!nearHome && !nearHostel && currentStudentData.status === "at_home") {
+            // Student left home â€” mark on_way
+            await db.ref("students/" + userId).update({
+              status: "on_way", journeyStartTime: Date.now(), journeyEndTime: null, lastUpdated: Date.now()
+            });
           }
-          // Location watcher stays active — never stopped by geofence
-          // so we can continuously detect home ↔ hostel ↔ on_way transitions
         }
 
         function startLocationSharing() {
@@ -1592,7 +1813,7 @@
             (err) => {
               showLocMsg("journeyLocMsg", "Location sharing error: " + err.message, "error");
             },
-            { enableHighAccuracy: true, maximumAge: 5000, timeout: 15000 }
+            { enableHighAccuracy: true, maximumAge: 10000, timeout: 30000 }
           );
         }
 
@@ -1610,7 +1831,7 @@
         // runGeofenceCheck, so status auto-updates whenever the student moves
         // between home, hostel, and anywhere else.
 
-        // ─── ADMIN functions ─────────────────────────────────────────
+        // â”€â”€â”€ ADMIN functions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         if (isAdmin) {
           let allStudents = {};
           let allBatches = {};
@@ -1676,6 +1897,15 @@
             document.getElementById("statAtHome").textContent = s.filter(x => x.status === "at_home").length;
           }
 
+          let currentView = 'card'; // 'card' or 'list'
+
+          window.toggleView = function () {
+            currentView = currentView === 'card' ? 'list' : 'card';
+            const btn = document.getElementById('viewToggleBtn');
+            btn.textContent = currentView === 'card' ? '☰ List View' : '⊞ Card View';
+            renderStudents();
+          };
+
           function renderStudents() {
             const grid = document.getElementById("studentsGrid");
             if (!grid) return;
@@ -1696,6 +1926,27 @@
 
             const statusIcon = { in_hostel: '🏠', on_way: '🚶', reached: '✅', at_home: '🏡' };
 
+            if (currentView === 'list') {
+              grid.className = 'students-list';
+              grid.innerHTML = students.map(s => {
+                const sName = s.name || 'Unknown Student';
+                return `
+                <div class="stu-list-row ${s.status}">
+                  <div class="stu-list-avatar ${s.status}">${esc(sName.charAt(0).toUpperCase())}</div>
+                  <div class="stu-list-info">
+                    <div class="stu-list-name">${esc(sName)}</div>
+                    <div class="stu-list-meta">🆔 ${esc(s.id)} &nbsp;|&nbsp; 🎓 ${esc(s.batchId)} &nbsp;|&nbsp; ${statusIcon[s.status] || ''} ${statusLabel(s.status)}</div>
+                  </div>
+                  <div class="stu-list-actions">
+                    <button class="small-btn green" onclick="toggleTrack('${esc(s.id)}', this)">📍 Track</button>
+                    <button class="small-btn danger" onclick="deleteStudent('${esc(s.id)}')">✕</button>
+                  </div>
+                </div>`;
+              }).join('');
+              return;
+            }
+
+            grid.className = 'students-grid';
             grid.innerHTML = students.map(s => {
               const sName = s.name || "Unknown Student";
               const sLetter = sName.charAt(0).toUpperCase();
@@ -1734,26 +1985,26 @@
             <div class="stu-avatar ${s.status}">${esc(sLetter)}</div>
             <div>
               <div class="stu-card-name">${esc(sName)}</div>
-              <div class="stu-card-id">🆔 ${esc(s.id)}</div>
+                <div class="stu-card-id">🆔 ${esc(s.id)}</div>
             </div>
           </div>
           <div class="stu-card-meta">
-            <div class="stu-meta-row">🎓 <span>Batch:</span> ${esc(s.batchId)}</div>
-            <div class="stu-meta-row">📍 <span>Current:</span> <b>${presence}</b></div>
-            ${dest ? `<div class="stu-meta-row">📍 <span>Dest:</span> ${esc(dest)}</div>` : ''}
-            ${started ? `<div class="stu-meta-row">🕐 <span>Started:</span> ${started}</div>` : ''}
-            <div class="stu-meta-row">🔄 <span>Updated:</span> ${updated}</div>
+              <div class="stu-meta-row">🎓 <span>Batch:</span> ${esc(s.batchId)}</div>
+              <div class="stu-meta-row">📍 <span>Current:</span> <b>${presence}</b></div>
+              ${dest ? `<div class="stu-meta-row">📍 <span>Dest:</span> ${esc(dest)}</div>` : ''}
+              ${started ? `<div class="stu-meta-row">🕐 <span>Started:</span> ${started}</div>` : ''}
+              <div class="stu-meta-row">🔄 <span>Updated:</span> ${updated}</div>
           </div>
           <div>
             <span class="stu-status-pill ${s.status}">${statusIcon[s.status] || ''} ${statusLabel(s.status)}</span>
           </div>
           <div class="stu-card-actions">
-            <button class="small-btn green" onclick="toggleTrack('${esc(s.id)}', this)">📍 Track</button>
+              <button class="small-btn green" onclick="toggleTrack('${esc(s.id)}', this)">📍 Track</button>
             <div class="stu-settings">
-              <button class="stu-settings-btn" onclick="toggleSettings(this)">⋯ More Options</button>
+                <button class="stu-settings-btn" onclick="toggleSettings(this)">... More Options</button>
               <div class="stu-dropdown">
-                <button class="stu-dropdown-item" onclick="adminResetStatus('${esc(s.id)}');closeAllDropdowns()">↺ Reset to In Hostel</button>
-                <button class="stu-dropdown-item danger" onclick="deleteStudent('${esc(s.id)}');closeAllDropdowns()">✕ Remove Student</button>
+                  <button class="stu-dropdown-item" onclick="adminResetStatus('${esc(s.id)}');closeAllDropdowns()">↺ Reset to In Hostel</button>
+                  <button class="stu-dropdown-item danger" onclick="deleteStudent('${esc(s.id)}');closeAllDropdowns()">✕ Remove Student</button>
               </div>
             </div>
           </div>
@@ -1783,7 +2034,7 @@
               const count = Object.values(allStudents || {}).filter(s => s && s.batchId === b.id).length;
               return `<tr>
         <td>${esc(b.id)}</td>
-        <td><span class="tbl-badge ${b.status === 'completed' ? 'reached' : 'in_hostel'}">${b.status}</span></td>
+                <td><span class="tbl-badge ${b.status === 'completed' ? 'reached' : 'in_hostel'}">${b.status}</span></td>
         <td>${count}</td>
         <td>${b.status === 'active'
                   ? `<button class="small-btn danger" onclick="completeBatch('${esc(b.id)}')">Mark Completed & Remove Students</button>`
@@ -1972,7 +2223,7 @@
             }, 4000);
           }
 
-          // ─── Voice Guide Logic ───────────────────────────────────
+          // â”€â”€â”€ Voice Guide Logic â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
           let voiceInterval = null;
 
           window.toggleVoiceGuide = function () {
@@ -2023,9 +2274,46 @@
             window.speechSynthesis.speak(utterance);
           }
         }
+
+        window.sendSOS = async function () {
+          const btn = document.getElementById('sosBtn');
+          const msg = document.getElementById('sosMsg');
+          btn.disabled = true;
+          btn.textContent = 'Sending SOS...';
+          msg.className = 'loc-msg info';
+          msg.textContent = 'Getting your location...';
+          const write = async (lat, lng) => {
+            await db.ref('sos/' + userId).set({
+              studentId: userId,
+              name: currentStudentData.name || userId,
+              batchId: currentStudentData.batchId || '',
+              lat: lat || null,
+              lng: lng || null,
+              timestamp: Date.now(),
+              resolved: false
+            });
+            const locText = lat ? 'Location attached' : 'No GPS - sent without location';
+            btn.textContent = 'SOS Sent! Admin Notified';
+            msg.className = lat ? 'loc-msg success' : 'loc-msg error';
+            msg.textContent = 'SOS alert sent. ' + locText;
+            setTimeout(() => { btn.disabled = false; btn.textContent = 'SEND SOS - I Need Help'; msg.className = 'loc-msg'; }, 30000);
+          };
+          if (!navigator.geolocation) { await write(null, null); return; }
+          navigator.geolocation.getCurrentPosition(
+            (pos) => write(pos.coords.latitude, pos.coords.longitude),
+            () => {
+              msg.textContent = 'High accuracy failed, trying network location...';
+              navigator.geolocation.getCurrentPosition(
+                (pos) => write(pos.coords.latitude, pos.coords.longitude),
+                () => { msg.textContent = 'GPS unavailable, sending without location...'; write(null, null); },
+                { enableHighAccuracy: false, timeout: 10000, maximumAge: 60000 }
+              );
+            },
+            { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+          );
+        };
       }
     </script>
-
 </body>
 
 </html>

@@ -49,6 +49,84 @@
       cursor: pointer;
     }
 
+    /* Dark mode */
+    body.dark {
+      background: #1a1d23;
+      color: #e0e0e0;
+    }
+
+    body.dark .section {
+      background: #23272f;
+      box-shadow: none;
+    }
+
+    body.dark .stat-card {
+      background: #23272f;
+      box-shadow: none;
+    }
+
+    body.dark .stat-card .num {
+      color: #7eb3ff;
+    }
+
+    body.dark th {
+      background: #2c3140;
+      color: #aaa;
+    }
+
+    body.dark td {
+      border-bottom-color: #2c3140;
+      color: #ccc;
+    }
+
+    body.dark .badge.in_hostel {
+      background: #1a3a2a;
+      color: #4cd98a;
+    }
+
+    body.dark .badge.on_way {
+      background: #3a3010;
+      color: #f0c040;
+    }
+
+    body.dark .badge.at_home {
+      background: #2a1f40;
+      color: #a07aff;
+    }
+
+    body.dark .badge.reached {
+      background: #1a2540;
+      color: #6699ff;
+    }
+
+    body.dark .stu-card {
+      background: #23272f;
+    }
+
+    body.dark .filter-row select,
+    body.dark .filter-row input {
+      background: #2c3140;
+      color: #ccc;
+      border-color: #3a3f50;
+    }
+
+    body.dark input {
+      background: #2c3140;
+      color: #ccc;
+      border-color: #3a3f50;
+    }
+
+    body.dark select {
+      background: #2c3140;
+      color: #ccc;
+    }
+
+    body.dark .view-toggle-btn {
+      background: #2c3140;
+      color: #ccc;
+      border-color: #3a3f50;
+    }
+
     .container {
       padding: 20px;
       max-width: 1300px;
@@ -196,15 +274,227 @@
       color: #999;
       padding: 20px;
     }
+
+    .students-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .stu-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
+      border-top: 4px solid #ddd;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .stu-card.in_hostel {
+      border-top-color: #27ae60;
+    }
+
+    .stu-card.on_way {
+      border-top-color: #e6a800;
+    }
+
+    .stu-card.reached {
+      border-top-color: #1967d2;
+    }
+
+    .stu-card.at_home {
+      border-top-color: #6f42c1;
+    }
+
+    .stu-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 800;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .stu-avatar.in_hostel {
+      background: #27ae60;
+    }
+
+    .stu-avatar.on_way {
+      background: #e6a800;
+    }
+
+    .stu-avatar.reached {
+      background: #1967d2;
+    }
+
+    .stu-avatar.at_home {
+      background: #6f42c1;
+    }
+
+    .view-toggle-btn {
+      padding: 6px 14px;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+      background: #f8f9fb;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      color: #333;
+    }
+
+    /* Offline Banner */
+    #offlineBanner {
+      display: none;
+      position: sticky;
+      top: 0;
+      z-index: 996;
+      background: #2c3e50;
+      color: #fff;
+      text-align: center;
+      padding: 10px 20px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+
+    #offlineBanner.online {
+      background: #27ae60;
+    }
+
+    /* Timeout Alert Banner */
+    #timeoutBanner {
+      display: none;
+      position: sticky;
+      top: 0;
+      z-index: 998;
+      background: #e67e22;
+      color: #fff;
+      padding: 12px 24px;
+      font-size: 14px;
+      font-weight: 700;
+      box-shadow: 0 4px 16px rgba(230, 126, 34, 0.5);
+    }
+
+    #timeoutBanner .tb-list {
+      margin-top: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    #timeoutBanner .tb-item {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 8px;
+      padding: 7px 14px;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    #timeoutBanner .tb-dismiss {
+      background: #fff;
+      color: #e67e22;
+      border: none;
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-weight: 800;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    /* SOS Alert Banner */
+    #sosAlertBanner {
+      display: none;
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      background: #c0392b;
+      color: #fff;
+      padding: 14px 24px;
+      font-size: 15px;
+      font-weight: 800;
+      animation: sosPulse 1s infinite alternate;
+      box-shadow: 0 4px 20px rgba(192, 57, 43, 0.6);
+    }
+
+    #sosAlertBanner.dark {
+      background: #8b0000;
+    }
+
+    @keyframes sosPulse {
+      from {
+        opacity: 1;
+      }
+
+      to {
+        opacity: 0.6;
+      }
+    }
+
+    #sosAlertBanner .sos-list {
+      margin-top: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    #sosAlertBanner .sos-item {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 8px;
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-size: 13px;
+    }
+
+    #sosAlertBanner .sos-resolve {
+      background: #fff;
+      color: #c0392b;
+      border: none;
+      border-radius: 6px;
+      padding: 5px 12px;
+      font-weight: 800;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .view-toggle-btn:hover {
+      background: #e8eaf0;
+    }
   </style>
 </head>
 
 <body>
 
+  <div id="offlineBanner">📵 You are offline — student data may be stale and SOS alerts will not come through</div>
+
+  <div id="timeoutBanner">
+    ⏰ Journey Timeout Warning
+    <div class="tb-list" id="timeoutList"></div>
+  </div>
+
+  <div id="sosAlertBanner">
+    🚨 SOS ALERT — Student(s) Need Help!
+    <div class="sos-list" id="sosList"></div>
+  </div>
+
   <header>
     <h1>CF Parents — Admin Dashboard</h1>
     <div class="right">
       <span id="adminName"></span>
+      <button id="darkToggle" onclick="toggleDark()">🌙 Dark</button>
       <button onclick="logoutUser()">Logout</button>
     </div>
   </header>
@@ -234,6 +524,8 @@
       </div>
     </div>
 
+    <div class="stats" id="batchStats" style="margin-top:-10px;"></div>
+
     <!-- Map Panel (hidden by default, shown when Track is clicked) -->
     <div class="section" id="mapSection" style="display:none;">
       <h2 style="display:flex;justify-content:space-between;align-items:center;">
@@ -241,6 +533,27 @@
         <button class="small-btn danger" onclick="closeMap()">✕ Close Map</button>
       </h2>
       <div id="map"></div>
+    </div>
+
+    <div class="section">
+      <h2>➕ Add Student</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;">
+        <input type="text" id="newStudentId" placeholder="Student ID (login ID)"
+          style="padding:9px 12px;border:1px solid #ddd;border-radius:8px;font-size:13px;outline:none;">
+        <input type="text" id="newStudentName" placeholder="Full Name"
+          style="padding:9px 12px;border:1px solid #ddd;border-radius:8px;font-size:13px;outline:none;">
+        <select id="newStudentBatch"
+          style="padding:9px 12px;border:1px solid #ddd;border-radius:8px;font-size:13px;outline:none;background:#fff;">
+          <option value="">Select Batch</option>
+        </select>
+        <input type="text" id="newStudentPhone" placeholder="Phone Number (optional)"
+          style="padding:9px 12px;border:1px solid #ddd;border-radius:8px;font-size:13px;outline:none;">
+        <input type="password" id="newStudentPass" placeholder="Password"
+          style="padding:9px 12px;border:1px solid #ddd;border-radius:8px;font-size:13px;outline:none;">
+        <button class="small-btn" style="background:#27ae60;padding:9px 16px;font-size:13px;border-radius:8px;"
+          onclick="addStudent()">➕ Add Student</button>
+      </div>
+      <div id="addStudentMsg" style="margin-top:10px;font-size:13px;"></div>
     </div>
 
     <div class="section">
@@ -267,8 +580,17 @@
     </div>
 
     <div class="section">
-      <h2>Students</h2>
+      <h2 style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+        Students
+        <div style="display:flex;gap:8px;">
+          <button class="view-toggle-btn" id="viewToggleBtn" onclick="toggleView()">⊞ Card View</button>
+          <button class="view-toggle-btn" onclick="exportCSV()"
+            style="background:#27ae60;color:#fff;border-color:#27ae60;">⬇ Export CSV</button>
+        </div>
+      </h2>
       <div class="filter-row">
+        <input type="text" id="searchFilter" placeholder="🔍 Search by name or ID..." oninput="renderStudents()"
+          style="flex:1;min-width:160px;">
         <select id="batchFilter" onchange="renderStudents()">
           <option value="">All Batches</option>
         </select>
@@ -280,12 +602,13 @@
           <option value="at_home">At Home</option>
         </select>
       </div>
-      <table>
+      <table id="studentsTable">
         <thead>
           <tr>
             <th>ID</th>
             <th>Name</th>
             <th>Batch</th>
+            <th>Phone</th>
             <th>Status</th>
             <th>Presence</th>
             <th>Destination</th>
@@ -299,26 +622,120 @@
           </tr>
         </tbody>
       </table>
+      <div class="students-grid" id="studentsGrid" style="display:none;"></div>
     </div>
 
   </div>
 
+  <!-- Journey History Modal -->
+  <div id="historyModal"
+    style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;align-items:center;justify-content:center;">
+    <div
+      style="background:#fff;border-radius:14px;padding:24px;width:90%;max-width:580px;max-height:85vh;overflow-y:auto;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <h3 style="font-size:16px;color:#1e3c72;">📋 Journey History — <span id="historyStudentName"></span></h3>
+        <button onclick="closeHistory()"
+          style="background:none;border:none;font-size:20px;cursor:pointer;color:#888;">✕</button>
+      </div>
+      <div id="historySummary" style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;"></div>
+      <div id="historyContent">
+        <p style="color:#999;text-align:center;">Loading...</p>
+      </div>
+    </div>
+  </div>
+
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging-compat.js"></script>
   <script src="js/firebase.js"></script>
 
   <!-- Leaflet -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <script>
+    // Dark mode
+    function toggleDark() {
+      const isDark = document.body.classList.toggle('dark');
+      localStorage.setItem('cfDark', isDark ? '1' : '');
+      document.getElementById('darkToggle').textContent = isDark ? '☀️ Light' : '🌙 Dark';
+    }
+    if (localStorage.getItem('cfDark')) {
+      document.body.classList.add('dark');
+      document.addEventListener('DOMContentLoaded', () => {
+        const btn = document.getElementById('darkToggle');
+        if (btn) btn.textContent = '☀️ Light';
+      });
+    }
+
+    // Offline banner
+    (function () {
+      const banner = document.getElementById('offlineBanner');
+      function update() {
+        if (!navigator.onLine) {
+          banner.style.display = 'block';
+          banner.classList.remove('online');
+          banner.textContent = '\ud83d\udcf5 You are offline \u2014 student data may be stale and SOS alerts will not come through';
+        } else if (banner.style.display === 'block') {
+          banner.classList.add('online');
+          banner.textContent = '\u2705 Back online! Data is live again.';
+          setTimeout(() => { banner.style.display = 'none'; banner.classList.remove('online'); }, 3000);
+        }
+      }
+      window.addEventListener('offline', update);
+      window.addEventListener('online', update);
+      update();
+    })();
+
     // Route guard
     const session = requireRole("admin");
-    if (session) document.getElementById("adminName").textContent = "Logged in as: " + session.id;
+    if (session) {
+      document.getElementById("adminName").textContent = "Logged in as: " + session.id;
+      if (localStorage.getItem('cfDark')) document.getElementById('darkToggle').textContent = '☀️ Light';
+    }
 
     let allStudents = {};
     let allBatches = {};
     let markers = {};
     let hostelLocation = null;
+
+    // ─── FCM Push Notifications ───────────────────────────────────────────
+    // IMPORTANT: Replace with your VAPID key from:
+    // Firebase Console → Project Settings → Cloud Messaging → Web Push certificates → Key pair
+    const VAPID_KEY = 'BPPoiRRyzuR9pbS2EJcuBgek9OtT9WQwXpTTV3XtMKqPKfS8g65gdXgxel68Dx-8okk175qIJfoYHp-sT_UK09c';
+
+    async function initFCM() {
+      if (!('serviceWorker' in navigator) || VAPID_KEY === '<YOUR_VAPID_KEY_HERE>') return;
+      try {
+        const reg = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+        const messaging = firebase.messaging();
+
+        const permission = await Notification.requestPermission();
+        if (permission !== 'granted') return;
+
+        const token = await messaging.getToken({ vapidKey: VAPID_KEY, serviceWorkerRegistration: reg });
+        if (token && session) {
+          await db.ref('fcmTokens/' + session.id).set({ token, updatedAt: Date.now() });
+        }
+
+        // Foreground messages (tab is open)
+        messaging.onMessage((payload) => {
+          const { title, body } = payload.notification || {};
+          showFCMToast(title, body);
+        });
+      } catch (e) {
+        console.warn('FCM init failed:', e.message);
+      }
+    }
+
+    function showFCMToast(title, body) {
+      const el = document.createElement('div');
+      el.style.cssText = 'position:fixed;bottom:20px;right:20px;background:#1e3c72;color:#fff;padding:14px 18px;border-radius:10px;font-size:13px;max-width:300px;box-shadow:0 4px 16px rgba(0,0,0,0.3);z-index:9999;';
+      el.innerHTML = `<div style="font-weight:800;margin-bottom:4px;">${title || 'CF Parents'}</div><div>${body || ''}</div>`;
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 5000);
+    }
+
+    initFCM();
 
     // Fetch hostel location for presence calculation
     db.ref("hostel").on("value", (snap) => {
@@ -369,10 +786,29 @@
       document.getElementById("statOnWay").textContent = students.filter(s => s.status === "on_way").length;
       document.getElementById("statReached").textContent = students.filter(s => s.status === "reached").length;
       document.getElementById("statAtHome").textContent = students.filter(s => s.status === "at_home").length;
+
+      // Batch breakdown
+      const batchCounts = {};
+      students.forEach(s => { if (s.batchId) batchCounts[s.batchId] = (batchCounts[s.batchId] || 0) + 1; });
+      const batchStatsEl = document.getElementById('batchStats');
+      batchStatsEl.innerHTML = Object.entries(batchCounts).map(([b, c]) =>
+        `<div class="stat-card"><div class="num">${c}</div><div class="label">🎓 ${esc(b)}</div></div>`
+      ).join('');
     }
 
     function statusLabel(status) {
       return { in_hostel: "In Hostel", on_way: "On the Way", reached: "Reached", at_home: "At Home" }[status] || status;
+    }
+
+    let currentView = 'table';
+
+    function toggleView() {
+      currentView = currentView === 'table' ? 'card' : 'table';
+      const btn = document.getElementById('viewToggleBtn');
+      btn.textContent = currentView === 'table' ? '⊞ Card View' : '☰ Table View';
+      document.getElementById('studentsTable').style.display = currentView === 'table' ? '' : 'none';
+      document.getElementById('studentsGrid').style.display = currentView === 'card' ? 'grid' : 'none';
+      renderStudents();
     }
 
     function renderStudents() {
@@ -381,10 +817,15 @@
 
       const batchFilter = document.getElementById("batchFilter")?.value || "";
       const statusFilter = document.getElementById("statusFilter")?.value || "";
+      const searchFilter = (document.getElementById("searchFilter")?.value || "").toLowerCase().trim();
 
       let students = Object.values(allStudents || {}).filter(s => s && s.id);
       if (batchFilter) students = students.filter(s => s.batchId === batchFilter);
       if (statusFilter) students = students.filter(s => s.status === statusFilter);
+      if (searchFilter) students = students.filter(s =>
+        (s.name || "").toLowerCase().includes(searchFilter) ||
+        (s.id || "").toLowerCase().includes(searchFilter)
+      );
 
       if (students.length === 0) {
         tbody.innerHTML = '<tr><td colspan="8" class="empty">No students found.</td></tr>';
@@ -423,18 +864,62 @@
         <td>${s.id}</td>
         <td>${esc(sName)}</td>
         <td>${esc(sBatch)}</td>
+        <td>${s.phone ? `<a href="tel:${esc(s.phone)}" style="color:#1e3c72;font-weight:700;">📞 ${esc(s.phone)}</a>` : '—'}</td>
         <td><span class="badge ${s.status || 'in_hostel'}">${statusLabel(s.status || 'in_hostel')}</span></td>
         <td style="font-weight:700; color:${presenceColor}">${presence}</td>
         <td>${esc(dest)}</td>
         <td>${updated}</td>
         <td>
           ${s.currentLocation && s.currentLocation.lat ? `<button class="small-btn" style="background:#27ae60" onclick="trackStudent('${s.id}')">📍 Track</button>` : ''}
+          <button class="small-btn" style="background:#6f42c1" onclick="showHistory('${s.id}', '${esc(s.name || s.id)}')">📋 History</button>
           <button class="small-btn" onclick="resetStatus('${s.id}')">Reset to In Hostel</button>
           <button class="small-btn danger" onclick="deleteStudent('${s.id}')">Remove</button>
         </td>
       </tr>
     `;
       }).join("");
+
+      // Card view
+      const grid = document.getElementById('studentsGrid');
+      grid.innerHTML = students.map(s => {
+        const sName = s.name || 'Unknown';
+        let presence = '—';
+        if (s.currentLocation && s.currentLocation.lat) {
+          const { lat, lng } = s.currentLocation;
+          if (s.destination?.lat && getDistance(lat, lng, s.destination.lat, s.destination.lng) < 0.3) presence = '🏡 Home';
+          else if (hostelLocation?.lat && getDistance(lat, lng, hostelLocation.lat, hostelLocation.lng) < 0.3) presence = '🏫 Hostel';
+          else presence = '🚶 On the Way';
+        } else {
+          if (s.status === 'at_home' || s.status === 'reached') presence = '🏡 Home';
+          else if (s.status === 'in_hostel') presence = '🏫 Hostel';
+          else presence = '🚶 On the Way';
+        }
+        const dest = s.destination?.address || '—';
+        const updated = s.lastUpdated ? new Date(s.lastUpdated).toLocaleTimeString() : '—';
+        return `
+        <div class="stu-card ${s.status || 'in_hostel'}">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div class="stu-avatar ${s.status || 'in_hostel'}">${esc(sName.charAt(0).toUpperCase())}</div>
+            <div>
+              <div style="font-size:15px;font-weight:800;color:#1e3c72;">${esc(sName)}</div>
+              <div style="font-size:12px;color:#999;">🆔 ${esc(s.id)} &nbsp;|&nbsp; 🎓 ${esc(s.batchId)}</div>
+            </div>
+          </div>
+          <div style="font-size:12px;color:#555;display:flex;flex-direction:column;gap:4px;">
+            <div>📍 <b>${presence}</b></div>
+            ${s.phone ? `<div><a href="tel:${esc(s.phone)}" style="color:#1e3c72;font-weight:700;">📞 ${esc(s.phone)}</a></div>` : ''}
+            <div>🏠 ${esc(dest)}</div>
+            <div>🔄 ${updated}</div>
+          </div>
+          <span class="badge ${s.status || 'in_hostel'}">${statusLabel(s.status || 'in_hostel')}</span>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            ${s.currentLocation?.lat ? `<button class="small-btn" style="background:#27ae60" onclick="trackStudent('${esc(s.id)}')">📍 Track</button>` : ''}
+            <button class="small-btn" style="background:#6f42c1" onclick="showHistory('${esc(s.id)}', '${esc(s.name || s.id)}')">📋 History</button>
+            <button class="small-btn" onclick="resetStatus('${esc(s.id)}')">↺ Reset</button>
+            <button class="small-btn danger" onclick="deleteStudent('${esc(s.id)}')">✕ Remove</button>
+          </div>
+        </div>`;
+      }).join('');
     }
 
     function populateBatchFilter() {
@@ -445,6 +930,49 @@
       select.innerHTML = '<option value="">All Batches</option>' +
         Array.from(batchIds).map(b => `<option value="${b}">${b}</option>`).join("");
       select.value = current;
+
+      // Also populate the Add Student batch dropdown
+      const newBatchSel = document.getElementById('newStudentBatch');
+      if (newBatchSel) {
+        const activeBatches = Object.values(allBatches).filter(b => b.status === 'active');
+        newBatchSel.innerHTML = '<option value="">Select Batch</option>' +
+          activeBatches.map(b => `<option value="${b.id}">${b.id}</option>`).join('');
+      }
+    }
+
+    async function addStudent() {
+      const id = (document.getElementById('newStudentId').value || '').trim().toLowerCase();
+      const name = document.getElementById('newStudentName').value.trim();
+      const batchId = document.getElementById('newStudentBatch').value;
+      const phone = document.getElementById('newStudentPhone').value.trim();
+      const pass = document.getElementById('newStudentPass').value;
+      const msgEl = document.getElementById('addStudentMsg');
+
+      if (!id || !name || !batchId || !pass) {
+        msgEl.style.color = '#e74c3c';
+        msgEl.textContent = 'Please fill in ID, Name, Batch, and Password.';
+        return;
+      }
+
+      try {
+        await window.registerUser(id, pass, { role: 'parent', studentName: name, batchId });
+        await db.ref('students/' + id).set({
+          id, name, batchId, phone: phone || '', status: 'in_hostel',
+          destination: null, currentLocation: null,
+          journeyStartTime: null, journeyEndTime: null,
+          lastUpdated: Date.now()
+        });
+        msgEl.style.color = '#27ae60';
+        msgEl.textContent = `Student "${name}" added successfully!`;
+        document.getElementById('newStudentId').value = '';
+        document.getElementById('newStudentName').value = '';
+        document.getElementById('newStudentBatch').value = '';
+        document.getElementById('newStudentPhone').value = '';
+        document.getElementById('newStudentPass').value = '';
+      } catch (err) {
+        msgEl.style.color = '#e74c3c';
+        msgEl.textContent = 'Error: ' + err.message;
+      }
     }
 
     function renderBatches() {
@@ -616,7 +1144,208 @@
       markers = {};
     }
 
-    function updateMap() { } // no-op, map updates only on Track click
+    async function showHistory(studentId, studentName) {
+      const modal = document.getElementById('historyModal');
+      document.getElementById('historyStudentName').textContent = studentName;
+      document.getElementById('historyContent').innerHTML = '<p style="color:#999;text-align:center;">Loading...</p>';
+      document.getElementById('historySummary').innerHTML = '';
+      modal.style.display = 'flex';
+
+      const snap = await db.ref('journeyHistory/' + studentId).once('value');
+      const history = snap.val();
+
+      if (!history) {
+        document.getElementById('historyContent').innerHTML = '<p style="color:#999;text-align:center;padding:30px;">No journey history found.</p>';
+        return;
+      }
+
+      const entries = Object.values(history).sort((a, b) => b.startTime - a.startTime);
+
+      // Summary stats
+      const completed = entries.filter(e => e.status === 'completed');
+      const totalMins = completed.reduce((sum, e) => sum + (e.endTime ? Math.round((e.endTime - e.startTime) / 60000) : 0), 0);
+      const avgMins = completed.length ? Math.round(totalMins / completed.length) : 0;
+      document.getElementById('historySummary').innerHTML = [
+        { label: 'Total Journeys', val: entries.length, color: '#1e3c72' },
+        { label: 'Completed', val: completed.length, color: '#27ae60' },
+        { label: 'Avg Duration', val: avgMins ? avgMins + ' mins' : '—', color: '#e67e22' }
+      ].map(s => `<div style="flex:1;min-width:90px;background:#f0f4ff;border-radius:10px;padding:10px;text-align:center;">
+        <div style="font-size:20px;font-weight:800;color:${s.color};">${s.val}</div>
+        <div style="font-size:11px;color:#888;margin-top:2px;">${s.label}</div>
+      </div>`).join('');
+
+      // Timeline
+      document.getElementById('historyContent').innerHTML = `
+        <div style="position:relative;padding-left:28px;">
+          <div style="position:absolute;left:10px;top:0;bottom:0;width:2px;background:#e0e0e0;"></div>
+          ${entries.map((e, i) => {
+        const isCompleted = e.status === 'completed';
+        const color = isCompleted ? '#27ae60' : '#e6a800';
+        const icon = isCompleted ? '\u2705' : '\u23f3';
+        const start = new Date(e.startTime).toLocaleString();
+        const end = e.endTime ? new Date(e.endTime).toLocaleString() : null;
+        const dest = e.destination?.address || (e.destination?.lat ? `${parseFloat(e.destination.lat).toFixed(4)}, ${parseFloat(e.destination.lng).toFixed(4)}` : '—');
+        const duration = e.endTime ? (() => {
+          const mins = Math.round((e.endTime - e.startTime) / 60000);
+          return mins >= 60 ? `${Math.floor(mins / 60)}h ${mins % 60}m` : `${mins} mins`;
+        })() : 'Ongoing';
+        return `
+            <div style="position:relative;margin-bottom:18px;">
+              <div style="position:absolute;left:-23px;top:12px;width:14px;height:14px;border-radius:50%;background:${color};border:2px solid #fff;box-shadow:0 0 0 2px ${color};"></div>
+              <div style="border:1px solid #eee;border-radius:10px;padding:14px;border-left:4px solid ${color};background:#fafafa;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:6px;">
+                  <span style="font-size:13px;font-weight:800;color:#1e3c72;">${icon} Journey #${entries.length - i}</span>
+                  <span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:12px;background:${isCompleted ? '#eafaf1' : '#fff7e0'};color:${color};">${isCompleted ? 'Completed' : 'Ongoing'}</span>
+                </div>
+                <div style="font-size:12px;color:#555;display:flex;flex-direction:column;gap:4px;">
+                <div>🏠 <b>Destination:</b> ${esc(dest)}</div>
+                <div>🕒 <b>Started:</b> ${start}</div>
+                ${end ? `<div>✅ <b>Ended:</b> ${end}</div>` : ''}
+                <div style="font-weight:700;color:${color};">⏱️ Duration: ${duration}</div>
+                </div>
+              </div>
+            </div>`;
+      }).join('')}
+        </div>`;
+    }
+
+    function closeHistory() {
+      document.getElementById('historyModal').style.display = 'none';
+    }
+
+    function exportCSV() {
+      const batchFilter = document.getElementById('batchFilter')?.value || '';
+      const statusFilter = document.getElementById('statusFilter')?.value || '';
+      const searchFilter = (document.getElementById('searchFilter')?.value || '').toLowerCase().trim();
+
+      let students = Object.values(allStudents || {}).filter(s => s && s.id);
+      if (batchFilter) students = students.filter(s => s.batchId === batchFilter);
+      if (statusFilter) students = students.filter(s => s.status === statusFilter);
+      if (searchFilter) students = students.filter(s =>
+        (s.name || '').toLowerCase().includes(searchFilter) ||
+        (s.id || '').toLowerCase().includes(searchFilter)
+      );
+
+      if (!students.length) { alert('No students to export.'); return; }
+
+      const headers = ['ID', 'Name', 'Batch', 'Phone', 'Status', 'Destination', 'Journey Started', 'Journey Ended', 'Last Updated'];
+      const rows = students.map(s => [
+        s.id,
+        s.name || '',
+        s.batchId || '',
+        s.phone || '',
+        statusLabel(s.status || 'in_hostel'),
+        s.destination?.address || (s.destination?.lat ? `${parseFloat(s.destination.lat).toFixed(4)},${parseFloat(s.destination.lng).toFixed(4)}` : ''),
+        s.journeyStartTime ? new Date(s.journeyStartTime).toLocaleString() : '',
+        s.journeyEndTime ? new Date(s.journeyEndTime).toLocaleString() : '',
+        s.lastUpdated ? new Date(s.lastUpdated).toLocaleString() : ''
+      ].map(v => `"${String(v).replace(/"/g, '""')}"`));
+
+      const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `cf-students-${new Date().toISOString().slice(0, 10)}.csv`;
+      a.click();
+    }
+
+    function updateMap() { }
+
+    // ─── SOS Listener ──────────────────────────────────────────────
+    let sosAlertActive = false;
+    db.ref('sos').on('value', (snap) => {
+      const all = snap.val() || {};
+      const active = Object.values(all).filter(s => !s.resolved);
+      const banner = document.getElementById('sosAlertBanner');
+      const list = document.getElementById('sosList');
+
+      if (active.length === 0) {
+        banner.style.display = 'none';
+        sosAlertActive = false;
+        return;
+      }
+
+      banner.style.display = 'block';
+      list.innerHTML = active.map(s => {
+        const time = new Date(s.timestamp).toLocaleTimeString();
+        const loc = s.lat ? `<a href="https://maps.google.com/?q=${s.lat},${s.lng}" target="_blank" style="color:#fff;text-decoration:underline;">📍 View on Map</a>` : '📍 No GPS';
+        return `<div class="sos-item">
+          <span>🆘 <b>${esc(s.name)}</b> (${esc(s.batchId)}) &nbsp;|&nbsp; ${time} &nbsp;|&nbsp; ${loc}</span>
+          <button class="sos-resolve" onclick="resolveSOSAlert('${esc(s.studentId)}')">✓ Resolved</button>
+        </div>`;
+      }).join('');
+
+      // Play alert sound once per new SOS
+      if (!sosAlertActive) {
+        sosAlertActive = true;
+        try {
+          const ctx = new (window.AudioContext || window.webkitAudioContext)();
+          let beepCount = 0;
+          const beepInterval = setInterval(() => {
+            if (ctx.state === 'suspended') ctx.resume();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain); gain.connect(ctx.destination);
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(1000, ctx.currentTime);
+            gain.gain.setValueAtTime(0.5, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+            osc.start();
+            osc.stop(ctx.currentTime + 0.4);
+            beepCount++;
+            if (beepCount >= 6) clearInterval(beepInterval);
+          }, 500);
+          window._sosBeepInterval = beepInterval;
+        } catch (e) { }
+        if (window.Notification && Notification.permission === 'granted') {
+          new Notification('🆘 SOS Alert!', { body: `${active[0].name} needs help!` });
+        }
+      }
+    });
+
+    async function resolveSOSAlert(studentId) {
+      await db.ref('sos/' + studentId).update({ resolved: true });
+      if (window._sosBeepInterval) { clearInterval(window._sosBeepInterval); window._sosBeepInterval = null; }
+      sosAlertActive = false;
+    }
+
+    // ─── Journey Timeout Check ────────────────────────────────────────
+    const TIMEOUT_HOURS = 3;
+    const dismissedTimeouts = new Set();
+
+    function checkJourneyTimeouts() {
+      const now = Date.now();
+      const overdue = Object.values(allStudents).filter(s =>
+        s && s.status === 'on_way' &&
+        s.journeyStartTime &&
+        (now - s.journeyStartTime) > TIMEOUT_HOURS * 60 * 60 * 1000 &&
+        !dismissedTimeouts.has(s.id)
+      );
+
+      const banner = document.getElementById('timeoutBanner');
+      const list = document.getElementById('timeoutList');
+
+      if (overdue.length === 0) { banner.style.display = 'none'; return; }
+
+      banner.style.display = 'block';
+      list.innerHTML = overdue.map(s => {
+        const hrs = ((now - s.journeyStartTime) / 3600000).toFixed(1);
+        const dest = s.destination?.address || 'Unknown destination';
+        return `<div class="tb-item">
+          <span>⚠️ <b>${esc(s.name)}</b> (${esc(s.batchId)}) has been traveling for <b>${hrs} hrs</b> → ${esc(dest)}</span>
+          <button class="tb-dismiss" onclick="dismissTimeout('${esc(s.id)}')">✓ Dismiss</button>
+        </div>`;
+      }).join('');
+    }
+
+    function dismissTimeout(studentId) {
+      dismissedTimeouts.add(studentId);
+      checkJourneyTimeouts();
+    }
+
+    // Run on data load and every 5 minutes
+    setInterval(checkJourneyTimeouts, 5 * 60 * 1000);
+    db.ref('students').on('value', () => setTimeout(checkJourneyTimeouts, 500));
   </script>
 
 </body>

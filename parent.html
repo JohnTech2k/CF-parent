@@ -646,13 +646,15 @@
 
       // Check distance to home (destination)
       if (currentStudentData.destination && currentStudentData.destination.lat) {
-        const distHome = getDistance(lat, lng, currentStudentData.destination.lat, currentStudentData.destination.lng);
-        if (distHome < 0.3) nearHome = true;
+        const dLat = parseFloat(currentStudentData.destination.lat);
+        const dLng = parseFloat(currentStudentData.destination.lng);
+        const distHome = getDistance(lat, lng, dLat, dLng);
+        if (distHome < 0.5) nearHome = true; // Increased to 500m for stability
       }
 
       // Check distance to hostel
       if (hostelLocation && hostelLocation.lat) {
-        const distHostel = getDistance(lat, lng, hostelLocation.lat, hostelLocation.lng);
+        const distHostel = getDistance(lat, lng, parseFloat(hostelLocation.lat), parseFloat(hostelLocation.lng));
         if (distHostel < 0.3) nearHostel = true;
       }
 
@@ -674,11 +676,11 @@
           });
         }
       } else {
-        // Outside safe zones - auto-transition to on_way
-        if (currentStudentData.status !== "on_way") {
+        // Outside safe zones - only auto-transition to on_way if coming FROM hostel
+        if (currentStudentData.status === "in_hostel") {
           await db.ref("students/" + studentId).update({
             status: "on_way",
-            journeyStartTime: currentStudentData.journeyStartTime || Date.now(),
+            journeyStartTime: Date.now(),
             journeyEndTime: null,
             lastUpdated: Date.now()
           });
